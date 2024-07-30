@@ -156,7 +156,6 @@ void wifiStatusLED() {
 
 
 void Networking::writeDataToThingSpeak(String data) {
-    // Implementation of sendDataToThingSpeak
     sendDataToThingSpeak(data);
 }
 

@@ -23,7 +23,7 @@ void setup() {
   pinMode(txPin, OUTPUT);
   // Set the baud rate for the SoftwareSerial object
   mySerial.begin(9600);
- 
+  network.setup();
 }
 
 // flush the serial buffer
@@ -47,4 +47,5 @@ void loop() {
     // this is where the data should be collected from serial and stored for upload every two minutes.
      network.writeDataToThingSpeak(message);
   }
+  //network.writeDataToThingSpeak("5;6;7;8;9;10");
 }
