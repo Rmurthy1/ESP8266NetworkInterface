@@ -12,10 +12,54 @@ const byte rxPin = 14; // d5
 const byte txPin = 12; // d6
 
 // Set up a new SoftwareSerial object
-// probably going to switch to the hardware serial once everything is programmed
 SoftwareSerial mySerial (rxPin, txPin);
 
-void serialFlush();
+const byte numChars = 32;
+char receivedChars[numChars];
+
+boolean newData = false;
+
+
+void recvWithStartEndMarkers() {
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char startMarker = '<';
+    char endMarker = '>';
+    char rc;
+ 
+    while (mySerial.available() > 0 && newData == false) {
+        rc = mySerial.read();
+
+        if (recvInProgress == true) {
+            if (rc != endMarker) {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) {
+                    ndx = numChars - 1;
+                }
+            }
+            else {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker) {
+            recvInProgress = true;
+        }
+    }
+}
+
+void showNewData() {
+    if (newData == true) {
+        network.writeDataToThingSpeak(String(receivedChars));
+        newData = false;
+        //network.writeDataToThingSpeak("5;6;7;8;9;10");
+    }
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -26,26 +70,9 @@ void setup() {
   network.setup();
 }
 
-// flush the serial buffer
-void serialFlush(){
-  while(mySerial.available() > 0) {
-    char t = mySerial.read();
-    Serial.println(t);
-  }
-}
 
 void loop() {
-
-  // put your main code here, to run repeatedly:
-  while (mySerial.available()) { 
-    message = mySerial.readString();
-    serialFlush();
-    messageReady = true;
-  }
-  if (messageReady == true) {
-    messageReady = false;
-    // this is where the data should be collected from serial and stored for upload every two minutes.
-     network.writeDataToThingSpeak(message);
-  }
   //network.writeDataToThingSpeak("5;6;7;8;9;10");
+  recvWithStartEndMarkers();
+  showNewData();
 }

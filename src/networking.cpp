@@ -118,8 +118,9 @@ void prepareJSON(String message) {
   // tokenize the string, count the tokens, prepare the data.
   String totalTokens = getValue(message, ';', 0);
   int totalTokensCount = totalTokens.toInt();
-  for (int i = 1; i <= totalTokensCount; i++) {
-    String field = "field"+String(i);
+  Serial.println("total tokens: " + totalTokensCount);
+  for (int i = 0; i <= totalTokensCount; i++) {
+    String field = "field"+String(i+1);
     String dataValue = getValue(message, ';', i);
     doc[field] = dataValue.toDouble();
   }
