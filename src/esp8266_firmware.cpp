@@ -18,8 +18,10 @@ const byte numChars = 32;
 char receivedChars[numChars];
 
 boolean newData = false;
+void recvwithStartEndMarkers();
+void showNewData();
 
-
+// Function to receive data from the serial port and store it in a buffer. the data must be formated as "<n1;n2>"
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
@@ -52,6 +54,7 @@ void recvWithStartEndMarkers() {
     }
 }
 
+
 void showNewData() {
     if (newData == true) {
         network.writeDataToThingSpeak(String(receivedChars));
@@ -60,16 +63,13 @@ void showNewData() {
     }
 }
 
-
 void setup() {
   Serial.begin(9600);
   pinMode(rxPin, INPUT);
   pinMode(txPin, OUTPUT);
-  // Set the baud rate for the SoftwareSerial object
   mySerial.begin(9600);
-  network.setup();
+  network.setup(10000);
 }
-
 
 void loop() {
   //network.writeDataToThingSpeak("5;6;7;8;9;10");

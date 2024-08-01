@@ -43,7 +43,7 @@ String getValue(String data, char separator, int index);
 void wifiStatusLED();
 void updateRate(int rate);
 
-// update the delay time between writes to ThingSpeak, in ms
+// update the delay time between writes to ThingSpeak, in ms. default is 10000
 void updateRate(int rate) {
   delayTime = rate;
 }
@@ -160,10 +160,15 @@ void Networking::writeDataToThingSpeak(String data) {
     sendDataToThingSpeak(data);
 }
 
-void Networking::setup() {
+void Networking::setup(int rate) {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(wifiLED, OUTPUT);
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
   blinkLight(lightBlink);
+  this->updateRate(rate);
+}
+
+void Networking::updateRate(int rate) {
+  updateRate(rate);
 }
