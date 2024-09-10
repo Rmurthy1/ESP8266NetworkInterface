@@ -7,8 +7,7 @@
 class Networking {
 public:
     void writeDataToThingSpeak(String data);
-    void setup(int rate);
-    void updateRate(int rate);
+    void setup();
 };
 
 #endif // NETWORKING_H

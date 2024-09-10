@@ -68,7 +68,7 @@ void setup() {
   pinMode(rxPin, INPUT);
   pinMode(txPin, OUTPUT);
   mySerial.begin(9600);
-  network.setup(10000);
+  network.setup();
 }
 
 void loop() {

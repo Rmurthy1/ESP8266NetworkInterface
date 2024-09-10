@@ -24,6 +24,7 @@ const byte wifiLED = 5; // d1
 unsigned long time_now = 0;
 int period = 1000; // time between blinks
 
+// this fingerprint stuff is not used at the moment, we send data insecurely.
 // Fingerprint check, make sure that the certificate has not expired.
 const char * fingerprint = SECRET_SHA1_FINGERPRINT; // use SECRET_SHA1_FINGERPRINT for fingerprint check
 
@@ -160,15 +161,11 @@ void Networking::writeDataToThingSpeak(String data) {
     sendDataToThingSpeak(data);
 }
 
-void Networking::setup(int rate) {
+void Networking::setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(wifiLED, OUTPUT);
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
   blinkLight(lightBlink);
-  this->updateRate(rate);
-}
 
-void Networking::updateRate(int rate) {
-  updateRate(rate);
 }
